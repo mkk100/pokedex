@@ -80,7 +80,9 @@ func commandMap() error{
 	if err != nil {
 		fmt.Println("yikes")
 	}
-	fmt.Println(p.Results)
+	for _, city := range p.Results{
+		fmt.Println(city.Name)
+	}
 	return nil
 }
 
