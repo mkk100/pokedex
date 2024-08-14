@@ -10,6 +10,8 @@ import (
 )
 
 var cliName string = "pokedex"
+var runOrNot bool = false
+var url string = "https://pokeapi.co/api/v2/location-area/"
 type cliCommand struct {
 	name        string
 	description string
@@ -64,8 +66,8 @@ type City struct {
     Name string
     URL  string
 }
-func commandMap() error{
-	resp, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+func apiCall(url string) PokemonCities {
+	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("yikes")
 	}
@@ -80,8 +82,21 @@ func commandMap() error{
 	if err != nil {
 		fmt.Println("yikes")
 	}
+	return p
+}
+func commandMap() error{
+	
+	p := apiCall(url)
+	if !runOrNot {
 	for _, city := range p.Results{
 		fmt.Println(city.Name)
+	}
+	runOrNot = true
+	} else {
+		n := apiCall(p.Next)
+		for _, city := range n.Results{
+			fmt.Println(city.Name)
+		}
 	}
 	return nil
 }
