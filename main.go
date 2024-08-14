@@ -43,6 +43,11 @@ func getCommand() map[string]cliCommand{
 			description: "Explore the world of Pokemon\n",
 			callback: commandMap,
 		},
+		"mapb":{
+			name: "mapb",
+			description: "Explore the world of Pokemon backwards\n",
+			callback: commandMapB,
+		},
 	}
 }
 
@@ -97,10 +102,25 @@ func commandMap() error{
 		for _, city := range n.Results{
 			fmt.Println(city.Name)
 		}
+		url = p.Next
 	}
 	return nil
 }
-
+func commandMapB() error{
+	p := apiCall(url)
+	if !runOrNot {
+	for _, city := range p.Results{
+		fmt.Println(city.Name)
+	}
+	runOrNot = true
+	} else {
+		n := apiCall(p.Previous.(string))
+		for _, city := range n.Results{
+			fmt.Println(city.Name)
+		}
+	}
+	return nil
+}
 func main(){
 	reader := bufio.NewScanner(os.Stdin)
 	printPrompt()
